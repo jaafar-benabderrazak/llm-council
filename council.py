@@ -166,20 +166,35 @@ class LLMCouncil:
         
         # Build the prompt based on round number
         if round_num == 1:
-            prompt = f"Discuss the following topic and provide your initial perspective:\n\n{topic}"
+            prompt = f"""Discuss the following topic and provide your initial perspective with proper citations and sources:
+
+TOPIC: {topic}
+
+Remember to:
+- Provide technical depth and specific examples
+- Cite authoritative sources (research papers, documentation, official resources)
+- Include URLs or proper citations
+- Be precise with technical specifications"""
         else:
-            prompt = (
-                f"Review the previous responses and provide your thoughts. "
-                f"Challenge weak points, support strong arguments, and add new insights:\n\n{topic}"
-            )
+            prompt = f"""Review the previous responses and provide your critical analysis:
+
+TOPIC: {topic}
+
+Your tasks for Round {round_num}:
+- VALIDATE sources provided by other council members
+- CROSS-CHECK facts and identify any errors
+- CHALLENGE weak arguments with counter-evidence
+- BUILD ON strong points with additional sources
+- ADDRESS common misconceptions
+- PROVIDE new insights with proper citations"""
         
         for agent in self.agents:
             if self.verbose:
                 self.console.print(f"[cyan]{agent.name} thinking...[/cyan]")
-                response = agent.generate_response(prompt, context)
+                response = agent.generate_response(prompt, context, round_num)
                 self._display_response(response)
             else:
-                response = agent.generate_response(prompt, context)
+                response = agent.generate_response(prompt, context, round_num)
             
             responses.append(response)
             
@@ -196,7 +211,7 @@ class LLMCouncil:
         topic: str, 
         all_rounds: List[List[AgentResponse]]
     ) -> str:
-        """Generate a synthesis of all debate rounds."""
+        """Generate a comprehensive academic-style article from all debate rounds."""
         # Use the first agent to synthesize
         synthesizer = self.agents[0]
         
@@ -206,27 +221,89 @@ class LLMCouncil:
             for response in round_responses:
                 all_responses.append(response)
         
-        synthesis_prompt = f"""Based on the council's multi-round discussion on the topic: "{topic}"
+        synthesis_prompt = f"""Based on the council's multi-round discussion on: "{topic}"
 
-Please provide a comprehensive synthesis that:
-1. Identifies the key points of agreement
-2. Summarizes the main areas of disagreement or different perspectives
-3. Highlights the strongest arguments presented
-4. Provides a balanced conclusion with actionable insights
-5. Notes any gaps or areas requiring further investigation
+You must now write a COMPREHENSIVE ACADEMIC-STYLE ARTICLE that:
 
-Be thorough, objective, and draw from all perspectives shared."""
+1. **EXECUTIVE SUMMARY**
+   - Brief overview of the topic and key findings
+   - Main conclusions (2-3 sentences)
+
+2. **INTRODUCTION**
+   - Context and importance of the topic
+   - Key questions addressed
+   - Scope of the analysis
+
+3. **DETAILED ANALYSIS**
+   - Synthesize all perspectives presented
+   - Include technical details, specifications, and data points
+   - Organize by themes or sub-topics
+   - Use headings and subheadings
+
+4. **SOURCE VALIDATION & CROSS-CHECKING**
+   - Evaluate the quality and reliability of sources cited
+   - List VERIFIED sources (URLs, papers, documentation)
+   - Note any conflicting sources or disputed claims
+   - Rate source credibility (High/Medium/Low with justification)
+
+5. **CONSENSUS & DISAGREEMENTS**
+   - Points of strong agreement across council members
+   - Areas of disagreement with competing evidence
+   - Nuanced perspectives that warrant consideration
+
+6. **COMMON MISCONCEPTIONS ADDRESSED**
+   - Identify and correct common misunderstandings about this topic
+   - Explain why these misconceptions are wrong
+   - Provide correct information with sources
+
+7. **TECHNICAL DEEP DIVE**
+   - Detailed technical specifications, benchmarks, or data
+   - Implementation considerations
+   - Performance characteristics (if applicable)
+   - Trade-offs and limitations
+
+8. **GAPS & LIMITATIONS**
+   - What the council couldn't fully address
+   - Areas requiring further research
+   - Acknowledged uncertainties
+
+9. **ACTIONABLE RECOMMENDATIONS**
+   - Concrete, specific recommendations
+   - Prioritized by importance and feasibility
+   - Context-dependent guidance (when to do X vs Y)
+
+10. **VERIFIED REFERENCES & RESOURCES**
+    - Complete list of all cited sources
+    - Format: [Title/Description] - [URL or Citation] - [Credibility Rating]
+    - Organize by category (Research Papers, Documentation, Tools, etc.)
+
+11. **CONCLUSION**
+    - Summary of findings
+    - Final verdict or recommendations
+    - Future outlook
+
+**FORMAT REQUIREMENTS:**
+- Use Markdown formatting with proper headers (##, ###)
+- Include bullet points and numbered lists where appropriate
+- Make it readable, comprehensive, and academically rigorous
+- Minimum 1000 words for complex topics
+- Every major claim should reference a source from the debate
+- Be thorough, objective, and balanced
+
+Generate the complete article now:"""
 
         if self.verbose:
-            self.console.print("[magenta]Synthesizing debate...[/magenta]")
+            self.console.print("[magenta]Generating comprehensive article with verified sources...[/magenta]")
             synthesis_response = synthesizer.generate_response(
                 synthesis_prompt, 
-                all_responses
+                all_responses,
+                round_num=999  # Special round number for synthesis
             )
         else:
             synthesis_response = synthesizer.generate_response(
                 synthesis_prompt, 
-                all_responses
+                all_responses,
+                round_num=999
             )
         
         return synthesis_response.content
@@ -248,14 +325,14 @@ Be thorough, objective, and draw from all perspectives shared."""
         ))
     
     def _display_synthesis(self, synthesis: str):
-        """Display the final synthesis."""
+        """Display the final comprehensive article."""
         if not self.verbose:
             return
         
         self.console.print("\n")
         self.console.print(Panel(
             Markdown(synthesis),
-            title="[bold magenta]Final Synthesis - Best Response[/bold magenta]",
+            title="[bold magenta]COMPREHENSIVE ARTICLE - Council Synthesis with Verified Sources[/bold magenta]",
             border_style="magenta",
             padding=(1, 2)
         ))

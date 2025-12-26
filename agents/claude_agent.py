@@ -21,11 +21,12 @@ class ClaudeAgent(BaseAgent):
     def generate_response(
         self, 
         prompt: str, 
-        context: Optional[List[AgentResponse]] = None
+        context: Optional[List[AgentResponse]] = None,
+        round_num: int = 1
     ) -> AgentResponse:
         """Generate response using Claude."""
         try:
-            system_prompt = self.get_system_prompt(context)
+            system_prompt = self.get_system_prompt(context, round_num)
             
             messages = [
                 {"role": "user", "content": prompt}

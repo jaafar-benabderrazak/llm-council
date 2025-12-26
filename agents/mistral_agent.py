@@ -22,11 +22,12 @@ class MistralAgent(BaseAgent):
     def generate_response(
         self, 
         prompt: str, 
-        context: Optional[List[AgentResponse]] = None
+        context: Optional[List[AgentResponse]] = None,
+        round_num: int = 1
     ) -> AgentResponse:
         """Generate response using Mistral."""
         try:
-            system_prompt = self.get_system_prompt(context)
+            system_prompt = self.get_system_prompt(context, round_num)
             
             messages = [
                 ChatMessage(role="system", content=system_prompt),
