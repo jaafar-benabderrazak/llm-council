@@ -158,16 +158,16 @@ Each agent needed to see not just the question, but what others had said. So we 
 
 ```mermaid
 graph TD
-    A[Topic: "Best database for startups?"] --> B[Round 1]
+    A[Topic: Best database for startups?] --> B[Round 1]
     
     B --> C1[Agent 1 sees: Topic only]
-    C1 --> R1[Response: "PostgreSQL because..."]
+    C1 --> R1[Response: PostgreSQL because...]
     
     B --> C2[Agent 2 sees: Topic + R1]
-    C2 --> R2[Response: "I disagree, MongoDB..."]
+    C2 --> R2[Response: I disagree, MongoDB...]
     
     B --> C3[Agent 3 sees: Topic + R1 + R2]
-    C3 --> R3[Response: "Both miss the point..."]
+    C3 --> R3[Response: Both miss the point...]
     
     R1 --> D[Round 2: Everyone sees everything]
     R2 --> D
