@@ -29,7 +29,7 @@ class Config:
     
     # Free/Open Source Model Names
     OLLAMA_MODEL: str = os.getenv("OLLAMA_MODEL", "llama2")
-    GROQ_MODEL: str = os.getenv("GROQ_MODEL", "llama3-70b-8192")
+    GROQ_MODEL: str = os.getenv("GROQ_MODEL", "llama3-8b-8192")  # Smaller model, less likely to hit limits
     HUGGINGFACE_MODEL: str = os.getenv("HUGGINGFACE_MODEL", "mistralai/Mistral-7B-Instruct-v0.2")
     DEEPSEEK_MODEL: str = os.getenv("DEEPSEEK_MODEL", "deepseek-chat")  # deepseek-chat or deepseek-coder
     
