@@ -22,14 +22,29 @@ LLM Council is a powerful framework that orchestrates discussions between multip
 
 ## 🌟 Features
 
+### Core Capabilities
 - **Multi-Agent Debates**: Multiple AI models discuss, challenge, and build upon each other's perspectives
-- **Flexible Configuration**: Use any combination of Claude Sonnet, ChatGPT, Gemini, and Mistral
+- **🔬 Research Mode**: Academic-style debates with source citations, validation, and comprehensive articles
+- **Flexible Configuration**: Use any combination of 7 LLM providers (Claude, ChatGPT, Gemini, Mistral, Ollama, Groq, HuggingFace)
 - **Multi-Round Discussions**: Conduct iterative debates with context-aware responses
 - **Intelligent Synthesis**: Automatically generate comprehensive conclusions from all perspectives
 - **Rich CLI Interface**: Beautiful terminal output with progress indicators and formatted results
 - **Programmatic API**: Full Python API for custom integrations
 - **Result Persistence**: Save debate transcripts and analysis as JSON
 - **Token Tracking**: Monitor API usage across all models
+
+### 🆕 Research Mode Features (NEW!)
+- **📚 Source Citations**: Agents provide and validate references, research papers, and documentation
+- **✅ Cross-Checking**: Agents verify each other's sources and identify errors
+- **🎓 Academic Articles**: Generate 1000+ word comprehensive articles with verified sources
+- **⚠️ Misconception Detection**: Automatically identifies and corrects common misunderstandings
+- **📊 Technical Depth**: Detailed specifications, benchmarks, and data-driven analysis
+- **🔍 Source Credibility**: Agents rate source reliability (High/Medium/Low)
+- **💡 Structured Output**: Executive summary, analysis, references, conclusion in academic format
+
+**Perfect for**: Research projects, technical decisions, literature reviews, comprehensive analysis
+
+👉 **[See Research Mode Documentation](RESEARCH_MODE.md)** for detailed guide
 
 ## 🚀 Quick Start
 
@@ -136,7 +151,32 @@ LLM Council
 
 ## 💡 Examples
 
-### Example 1: Basic Debate
+### Example 1: Research Mode Debate with Citations
+```python
+from main import create_council
+
+topic = """
+Compare PostgreSQL vs MongoDB for a social media application:
+- Performance benchmarks (cite specific tests)
+- Scalability patterns (reference documentation)
+- Operational complexity (cite sources)
+- Real-world case studies
+
+Provide technical specifications and authoritative sources.
+"""
+
+council = create_council(
+    topic=topic,
+    agents=["claude", "chatgpt", "groq"],
+    rounds=3  # Multiple rounds for source validation
+)
+
+result = council.debate(topic=topic, rounds=3)
+# Generates comprehensive article with verified sources
+print(result.synthesis)
+```
+
+### Example 2: Basic Debate
 ```python
 from main import create_council
 
@@ -151,7 +191,7 @@ result = council.debate(topic=topic, rounds=3)
 print(result.synthesis)
 ```
 
-### Example 2: Custom Council
+### Example 3: Custom Council
 ```python
 from agents import ClaudeAgent, ChatGPTAgent
 from council import LLMCouncil
@@ -165,23 +205,37 @@ council = LLMCouncil(agents, verbose=True)
 result = council.debate("How to secure a cloud infrastructure?")
 ```
 
-### Example 3: Quick Discussion
+### Example 4: Free Tier Research
 ```python
-council = create_council()
-synthesis = council.quick_discuss("Best practices for API design")
-print(synthesis)
+# Use only free models for comprehensive research
+council = create_council(
+    topic="Analyze transformer architectures: BERT vs GPT",
+    agents=["groq", "gemini", "ollama"],
+    rounds=2
+)
+
+result = council.debate(topic="...", rounds=2)
+# Still generates citation-backed article - completely free!
 ```
 
 More examples in the `examples/` directory!
 
 ## 🎯 Use Cases
 
-- **Research & Analysis**: Get multi-perspective analysis on complex topics
+### Standard Mode
+- **Quick Analysis**: Get multi-perspective insights on any topic
 - **Decision Making**: Evaluate pros/cons from different angles
 - **Problem Solving**: Generate comprehensive solutions through collaborative thinking
 - **Content Creation**: Develop well-rounded content incorporating diverse viewpoints
 - **Education**: Explore topics through structured debate and discussion
-- **Product Strategy**: Evaluate features, approaches, and trade-offs
+
+### 🔬 Research Mode
+- **Academic Research**: Generate literature reviews with verified citations
+- **Technical Decisions**: Architecture decisions with benchmarks and sources
+- **Comprehensive Reports**: In-depth analysis with cross-checked facts
+- **Documentation**: Feature comparisons with authoritative references
+- **Learning Resources**: Educational content with credible sources
+- **Fact-Checking**: Multi-agent validation of claims and sources
 - **Code Review**: Get multiple perspectives on architectural decisions
 
 ## ⚙️ Configuration
