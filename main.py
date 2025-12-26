@@ -16,6 +16,11 @@ def create_council(models: List[str] = None) -> LLMCouncil:
     
     Args:
         models: List of model names to include. If None, uses all available.
+                Supports specific model syntax: "ollama:model-name", "groq:model-name"
+                Examples:
+                - "ollama" - uses default Ollama model
+                - "ollama:llama3.1:8b" - uses specific Ollama model
+                - "gemini" - uses default Gemini model
         
     Returns:
         Configured LLMCouncil instance
@@ -24,9 +29,33 @@ def create_council(models: List[str] = None) -> LLMCouncil:
     
     available_models = Config.get_available_models()
     
+    # Parse model specifications (support provider:model syntax)
+    parsed_models = []
+    ollama_models = []  # Track specific ollama models
+    
     if models:
-        # Use only requested models that are available
-        models_to_use = [m for m in models if m in available_models]
+        for model_spec in models:
+            if ":" in model_spec:
+                # Specific model: "ollama:llama3.1:8b" or "groq:model-name"
+                parts = model_spec.split(":", 1)
+                provider = parts[0]
+                specific_model = parts[1] if len(parts) > 1 else None
+                
+                if provider == "ollama" and specific_model:
+                    ollama_models.append(specific_model)
+                    parsed_models.append(f"ollama:{specific_model}")
+                elif provider in available_models:
+                    parsed_models.append(provider)
+                else:
+                    print(f"Warning: Provider '{provider}' not available or not configured")
+            else:
+                # Simple provider name: "gemini", "claude", etc.
+                if model_spec in available_models:
+                    parsed_models.append(model_spec)
+                else:
+                    print(f"Warning: Model '{model_spec}' not available")
+        
+        models_to_use = parsed_models
     else:
         # Use all available models
         models_to_use = available_models
@@ -94,18 +123,38 @@ def create_council(models: List[str] = None) -> LLMCouncil:
                 print(f"Warning: Could not initialize Mistral agent: {e}")
     
     # Free/Open source models
-    if "ollama" in models_to_use:
+    # Handle multiple Ollama agents with different models
+    ollama_specs = [m for m in models_to_use if m.startswith("ollama")]
+    
+    if ollama_specs:
         if OllamaAgent is None:
             print("Warning: Ollama requested but ollama package not installed.")
             print("Install with: pip install ollama")
         else:
-            try:
-                agents.append(OllamaAgent(
-                    name="Llama",
-                    role="Local Reasoning Expert - Free local inference"
-                ))
-            except Exception as e:
-                print(f"Warning: Could not initialize Ollama agent: {e}")
+            # If no specific models, use default once
+            if not any(":" in spec for spec in ollama_specs):
+                try:
+                    agents.append(OllamaAgent(
+                        name="Llama",
+                        role="Local Reasoning Expert - Free local inference"
+                    ))
+                except Exception as e:
+                    print(f"Warning: Could not initialize Ollama agent: {e}")
+            else:
+                # Create agent for each specific Ollama model
+                for spec in ollama_specs:
+                    if ":" in spec:
+                        model_name = spec.split(":", 1)[1]
+                        # Derive friendly name from model
+                        friendly_name = model_name.split(":")[0].title()
+                        try:
+                            agents.append(OllamaAgent(
+                                name=friendly_name,
+                                role=f"Local Expert ({model_name})",
+                                model=model_name
+                            ))
+                        except Exception as e:
+                            print(f"Warning: Could not initialize Ollama agent with {model_name}: {e}")
     
     if "groq" in models_to_use:
         if GroqAgent is None:
@@ -173,8 +222,11 @@ def main():
     parser.add_argument(
         "--models",
         nargs="+",
-        choices=["claude", "chatgpt", "gemini", "mistral", "ollama", "groq", "huggingface", "deepseek"],
-        help="Models to include in the council (default: all available)"
+        help=(
+            "Models to include in the council (default: all available). "
+            "Supports specific model syntax for providers like Ollama. "
+            "Examples: claude, gemini, ollama:llama3.1:8b, ollama:mistral:7b, ollama:deepseek-coder:6.7b"
+        )
     )
     parser.add_argument(
         "--no-save",

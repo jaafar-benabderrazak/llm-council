@@ -98,9 +98,24 @@ python main.py "Best practices for microservices architecture" --rounds 5
 # Use specific models only
 python main.py "Future of quantum computing" --models claude chatgpt
 
+# ⭐ NEW: Use specific Ollama models
+python main.py "topic" --models ollama:llama3.1:8b ollama:mistral:7b gemini --rounds 3
+
+# Use 5 FREE models for comprehensive research
+python main.py "How to secure A2A protocols?" \
+  --models \
+    ollama:deepseek-coder:6.7b \
+    ollama:llama3.1:8b \
+    ollama:mistral:7b \
+    ollama:phi3:mini \
+    gemini \
+  --rounds 5
+
 # Quick mode (single round)
 python main.py "Top 3 programming languages for AI" --quick
 ```
+
+👉 **[See Specific Model Selection Guide](SPECIFIC_MODELS_GUIDE.md)** for complete syntax reference
 
 **Python API:**
 ```python
