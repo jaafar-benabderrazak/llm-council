@@ -166,7 +166,12 @@ def main():
     parser.add_argument(
         "--no-save",
         action="store_true",
-        help="Don't save results to file"
+        help="Don't save results to files"
+    )
+    parser.add_argument(
+        "--no-markdown",
+        action="store_true",
+        help="Don't save Markdown article (JSON only)"
     )
     parser.add_argument(
         "--quick",
@@ -203,7 +208,8 @@ def main():
         result = council.debate(
             topic=topic,
             rounds=args.rounds,
-            save_results=not args.no_save
+            save_results=not args.no_save,
+            save_markdown=not args.no_markdown and not args.no_save
         )
 
 
