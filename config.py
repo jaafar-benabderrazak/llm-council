@@ -24,7 +24,7 @@ class Config:
     # Paid Model Names
     OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-4-turbo-preview")
     ANTHROPIC_MODEL: str = os.getenv("ANTHROPIC_MODEL", "claude-3-5-sonnet-20241022")
-    GOOGLE_MODEL: str = os.getenv("GOOGLE_MODEL", "gemini-1.5-pro")
+    GOOGLE_MODEL: str = os.getenv("GOOGLE_MODEL", "gemini-2.5-flash")
     MISTRAL_MODEL: str = os.getenv("MISTRAL_MODEL", "mistral-large-latest")
     
     # Free/Open Source Model Names
