@@ -200,31 +200,6 @@ Fair point.
 
 So began the mission to make LLM Council accessible to everyone. Enter the free tier revolution:
 
-```mermaid
-mindmap
-    root((Making It<br/>FREE))
-        Local Power
-            Ollama
-                Run on your machine
-                100% free
-                Complete privacy
-                No API limits
-        Cloud Free
-            Groq
-                Ultra fast
-                Free API
-                Great quality
-            Gemini
-                Free tier
-                60 req/min
-                Google quality
-        Open Source
-            HuggingFace
-                Thousands of models
-                Community driven
-                Free inference
-```
-
 Three new agents joined the council:
 
 **Ollama** - The local hero. Runs entirely on your machine. Free forever. Perfect for privacy-conscious users.
@@ -396,37 +371,6 @@ Debugging output became a presentation. Users loved it.
 ## Chapter 9: Documentation as First-Class Code
 
 Good code deserves great documentation. But this project went further - documentation became part of the product:
-
-```mermaid
-mindmap
-    root((Docs))
-        Quick Start
-            GET_STARTED.md
-                3-minute setup
-            QUICKSTART.md
-                Essential commands
-            setup_check.py
-                Automated verification
-        Deep Dive
-            README.md
-                Full reference
-            USAGE_GUIDE.md
-                Every feature
-            TECHNICAL_ARTICLE.md
-                Architecture deep dive
-        Free Options
-            FREE_TIER_GUIDE.md
-                Zero-cost setup
-            FREE_OPTIONS_SUMMARY.md
-                Quick reference
-        Reference
-            INDEX.md
-                Navigation hub
-            RESOURCES.md
-                50+ external links
-            PROJECT_STRUCTURE.md
-                Code organization
-```
 
 Thirteen documentation files. Multiple learning paths. Something for everyone:
 - **Beginners** get `GET_STARTED.md` - up and running in 3 minutes
@@ -640,74 +584,9 @@ Mix and match based on needs. Start free, scale up when justified.
 
 ---
 
-## Chapter 15: The Development Timeline
-
-From idea to production in two days:
-
-```mermaid
-gantt
-    title Building LLM Council: A Two-Day Journey
-    dateFormat HH:mm
-    section Day 1: Foundation
-    Project Vision & Planning     :00:00, 1h
-    Base Architecture             :01:00, 2h
-    First Agent (Claude)          :03:00, 1h
-    Multi-Agent System            :04:00, 2h
-    Debate Orchestration          :06:00, 3h
-    Initial Testing               :09:00, 1h
-    
-    section Day 1: Documentation
-    README & Quick Start          :10:00, 2h
-    Usage Examples                :12:00, 2h
-    Resource Collection           :14:00, 1h
-    
-    section Day 2: Enhancement
-    Free Tier Research            :00:00, 1h
-    Ollama Integration            :01:00, 2h
-    Groq Integration              :03:00, 1h
-    HuggingFace Integration       :04:00, 1h
-    Free Tier Documentation       :05:00, 2h
-    
-    section Day 2: Polish
-    Windows Compatibility         :07:00, 2h
-    Error Handling                :09:00, 1h
-    Final Testing                 :10:00, 2h
-    Technical Article             :12:00, 2h
-    Git & GitHub Setup            :14:00, 1h
-```
-
-Two intense days. Countless iterations. One powerful framework.
-
----
-
-## Chapter 16: Lessons Learned
+## Chapter 15: Lessons Learned
 
 Building LLM Council taught valuable lessons:
-
-```mermaid
-mindmap
-    root((Lessons))
-        Architecture
-            Start simple
-            Plan for extension
-            Abstract early
-            Test continuously
-        User Experience
-            Free tier matters
-            Docs are product
-            Examples teach
-            Setup must be easy
-        Technical
-            Handle errors gracefully
-            Support multiple platforms
-            Version compatibility
-            Model deprecation
-        Community
-            Open source from day 1
-            Clear contribution path
-            Responsive to feedback
-            Share knowledge
-```
 
 **Key Insights:**
 
@@ -719,7 +598,7 @@ mindmap
 
 ---
 
-## Chapter 17: The Impact
+## Chapter 16: The Impact
 
 What started as an experiment became something more:
 
@@ -753,7 +632,7 @@ Not just code - an **enabler of possibilities**.
 
 ---
 
-## Chapter 18: The Architecture in Action
+## Chapter 17: The Architecture in Action
 
 Watch a real debate unfold:
 
@@ -813,7 +692,7 @@ This is what makes LLM Council special - not just answers, but *reasoning*.
 
 ---
 
-## Chapter 19: The Extension Points
+## Chapter 18: The Extension Points
 
 The architecture was designed for growth:
 
@@ -860,7 +739,7 @@ Every piece was designed to extend. The framework grew not despite its architect
 
 ---
 
-## Chapter 20: The Numbers Tell a Story
+## Chapter 19: The Numbers Tell a Story
 
 After everything was built:
 
@@ -932,40 +811,6 @@ graph TB
 
 ---
 
-## The Future: Where This Goes Next
-
-The journey doesn't end here. Ideas for tomorrow:
-
-```mermaid
-timeline
-    title The Road Ahead
-    Phase 1 (Months 1-3) : Streaming Responses
-                         : Real-time debate viewing
-                         : WebSocket support
-    
-    Phase 2 (Months 4-6) : Web Interface
-                         : Gradio/Streamlit UI
-                         : Share debates publicly
-    
-    Phase 3 (Months 7-9) : Voting & Rating
-                         : Community feedback
-                         : Best argument selection
-    
-    Phase 4 (Months 10-12) : Integrations
-                           : Discord bot
-                           : Slack app
-                           : GitHub Actions
-    
-    Phase 5 (Year 2) : Advanced Features
-                     : Custom synthesis algorithms
-                     : Multi-language support
-                     : Visual debate flows
-```
-
-But that's a story for another time.
-
----
-
 ## Conclusion: The Power of Perspective
 
 We started with a simple question: "Can different LLMs discuss and challenge each other?"
@@ -979,28 +824,6 @@ Because the best answers don't come from a single source. They emerge from:
 - Thoughtful synthesis
 
 LLM Council makes this possible. For everyone. For free.
-
-```mermaid
-mindmap
-    root((LLM Council))
-        What It Is
-            Multi-agent framework
-            Debate orchestrator
-            Synthesis engine
-        What It Does
-            Orchestrates AI debates
-            Challenges assumptions
-            Synthesizes insights
-        Why It Matters
-            Better decisions
-            Diverse perspectives
-            Accessible to all
-        What's Next
-            You decide
-            Build on it
-            Extend it
-            Share it
-```
 
 ---
 
