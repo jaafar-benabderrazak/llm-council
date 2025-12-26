@@ -14,7 +14,7 @@
 
 **Where diverse AI perspectives converge to produce the best responses.**
 
-LLM Council is a powerful framework that orchestrates discussions between multiple Large Language Models (Claude Sonnet, ChatGPT, Gemini, and Mistral) to generate well-rounded, critically analyzed responses through collaborative debate.
+LLM Council is a powerful framework that orchestrates discussions between multiple Large Language Models (Claude Sonnet, ChatGPT, Gemini, Mistral, DeepSeek, and more) to generate well-rounded, critically analyzed responses through collaborative debate.
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -25,12 +25,12 @@ LLM Council is a powerful framework that orchestrates discussions between multip
 ### Core Capabilities
 - **Multi-Agent Debates**: Multiple AI models discuss, challenge, and build upon each other's perspectives
 - **🔬 Research Mode**: Academic-style debates with source citations, validation, and comprehensive articles
-- **Flexible Configuration**: Use any combination of 7 LLM providers (Claude, ChatGPT, Gemini, Mistral, Ollama, Groq, HuggingFace)
+- **Flexible Configuration**: Use any combination of 8 LLM providers (Claude, ChatGPT, Gemini, Mistral, DeepSeek, Ollama, Groq, HuggingFace)
 - **Multi-Round Discussions**: Conduct iterative debates with context-aware responses
 - **Intelligent Synthesis**: Automatically generate comprehensive conclusions from all perspectives
 - **Rich CLI Interface**: Beautiful terminal output with progress indicators and formatted results
 - **Programmatic API**: Full Python API for custom integrations
-- **Result Persistence**: Save debate transcripts and analysis as JSON
+- **Result Persistence**: Save debate transcripts and analysis as JSON + Markdown with Mermaid diagrams
 - **Token Tracking**: Monitor API usage across all models
 
 ### 🆕 Research Mode Features (NEW!)

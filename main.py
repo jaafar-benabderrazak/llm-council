@@ -4,7 +4,7 @@ from typing import List
 
 from agents import (
     ClaudeAgent, ChatGPTAgent, GeminiAgent, MistralAgent,
-    OllamaAgent, GroqAgent, HuggingFaceAgent, BaseAgent
+    OllamaAgent, GroqAgent, HuggingFaceAgent, DeepSeekAgent, BaseAgent
 )
 from council import LLMCouncil
 from config import Config
@@ -133,6 +133,19 @@ def create_council(models: List[str] = None) -> LLMCouncil:
             except Exception as e:
                 print(f"Warning: Could not initialize HuggingFace agent: {e}")
     
+    if "deepseek" in models_to_use:
+        if DeepSeekAgent is None:
+            print("Warning: DeepSeek requested but openai package not installed.")
+            print("Install with: pip install openai")
+        else:
+            try:
+                agents.append(DeepSeekAgent(
+                    name="DeepSeek",
+                    role="Technical Innovator - Cutting-edge Chinese LLM"
+                ))
+            except Exception as e:
+                print(f"Warning: Could not initialize DeepSeek agent: {e}")
+    
     if not agents:
         raise ValueError(
             "No agents could be initialized. Please check your configuration and installed packages."
@@ -160,7 +173,7 @@ def main():
     parser.add_argument(
         "--models",
         nargs="+",
-        choices=["claude", "chatgpt", "gemini", "mistral", "ollama", "groq", "huggingface"],
+        choices=["claude", "chatgpt", "gemini", "mistral", "ollama", "groq", "huggingface", "deepseek"],
         help="Models to include in the council (default: all available)"
     )
     parser.add_argument(

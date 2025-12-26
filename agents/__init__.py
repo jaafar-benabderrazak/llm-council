@@ -38,6 +38,11 @@ try:
 except ImportError:
     HuggingFaceAgent = None
 
+try:
+    from .deepseek_agent import DeepSeekAgent
+except ImportError:
+    DeepSeekAgent = None
+
 __all__ = [
     "BaseAgent",
     "AgentResponse",
@@ -48,5 +53,6 @@ __all__ = [
     "OllamaAgent",
     "GroqAgent",
     "HuggingFaceAgent",
+    "DeepSeekAgent",
 ]
 

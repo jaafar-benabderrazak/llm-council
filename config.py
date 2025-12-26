@@ -19,6 +19,7 @@ class Config:
     # Free/Open Source API Keys (optional)
     GROQ_API_KEY: Optional[str] = os.getenv("GROQ_API_KEY")
     HUGGINGFACE_API_KEY: Optional[str] = os.getenv("HUGGINGFACE_API_KEY")  # Optional for public models
+    DEEPSEEK_API_KEY: Optional[str] = os.getenv("DEEPSEEK_API_KEY")  # DeepSeek (Chinese provider, affordable)
     
     # Paid Model Names
     OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-4-turbo-preview")
@@ -30,6 +31,7 @@ class Config:
     OLLAMA_MODEL: str = os.getenv("OLLAMA_MODEL", "llama2")
     GROQ_MODEL: str = os.getenv("GROQ_MODEL", "llama3-70b-8192")
     HUGGINGFACE_MODEL: str = os.getenv("HUGGINGFACE_MODEL", "mistralai/Mistral-7B-Instruct-v0.2")
+    DEEPSEEK_MODEL: str = os.getenv("DEEPSEEK_MODEL", "deepseek-chat")  # deepseek-chat or deepseek-coder
     
     # Council Settings
     MAX_ROUNDS: int = int(os.getenv("MAX_ROUNDS", "3"))
@@ -45,7 +47,8 @@ class Config:
             cls.ANTHROPIC_API_KEY,
             cls.GOOGLE_API_KEY,
             cls.MISTRAL_API_KEY,
-            cls.GROQ_API_KEY
+            cls.GROQ_API_KEY,
+            cls.DEEPSEEK_API_KEY
         ]
         available_keys = [k for k in keys if k]
         
@@ -77,10 +80,11 @@ class Config:
                 f"At least 2 models must be available for LLM Council to work.\n"
                 f"Found: {len(available_keys)} API key(s) and {len(free_packages)} free package(s).\n\n"
                 f"Options:\n"
-                f"1. Add API keys to your .env file (OpenAI, Anthropic, Google, Mistral, or Groq)\n"
+                f"1. Add API keys to your .env file (OpenAI, Anthropic, Google, Mistral, Groq, or DeepSeek)\n"
                 f"2. Install free packages: pip install ollama groq huggingface-hub\n"
                 f"3. For Ollama: Download from https://ollama.ai/ and run 'ollama pull llama2'\n"
-                f"4. For Groq: Get free API key from https://console.groq.com/\n\n"
+                f"4. For Groq: Get free API key from https://console.groq.com/\n"
+                f"5. For DeepSeek: Get affordable API key from https://platform.deepseek.com/\n\n"
                 f"See FREE_TIER_GUIDE.md for complete setup instructions."
             )
         return True
@@ -99,6 +103,10 @@ class Config:
             models.append("gemini")
         if cls.MISTRAL_API_KEY:
             models.append("mistral")
+        
+        # Affordable/Free models
+        if cls.DEEPSEEK_API_KEY:
+            models.append("deepseek")
         
         # Free/Open source models
         try:
