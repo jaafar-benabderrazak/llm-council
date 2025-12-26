@@ -70,8 +70,17 @@ cp .env.example .env
 Required API keys (at least 2):
 - `OPENAI_API_KEY` - For ChatGPT
 - `ANTHROPIC_API_KEY` - For Claude
-- `GOOGLE_API_KEY` - For Gemini
+- `GOOGLE_API_KEY` - For Gemini (has free tier!)
 - `MISTRAL_API_KEY` - For Mistral AI
+- `GROQ_API_KEY` - For Groq (free!)
+- `DEEPSEEK_API_KEY` - For DeepSeek API (affordable)
+
+**OR use 100% free local options:**
+- **Ollama** - Run DeepSeek, Llama, or other models locally (FREE, no API key)
+- **Groq** - Free cloud API (get key at https://console.groq.com/)
+- **Gemini** - Free tier available
+
+See `DEEPSEEK_FREE_GUIDE.md` for using free open-source DeepSeek models!
 
 ### Basic Usage
 
