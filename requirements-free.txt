@@ -1,0 +1,21 @@
+# Minimal requirements for FREE options only
+# Install with: pip install -r requirements-free.txt
+# Compatible with Python 3.13+
+
+# Free/Open Source API clients
+ollama>=0.1.7
+groq>=0.4.2
+huggingface-hub>=0.20.3
+
+# Google Gemini (has free tier)
+google-generativeai>=0.5.0
+
+# Utilities (using versions compatible with Python 3.13)
+python-dotenv>=1.0.0
+pydantic>=2.9.0
+colorama>=0.4.6
+rich>=13.7.1
+
+# Optional: For enhanced features
+requests>=2.31.0
+
