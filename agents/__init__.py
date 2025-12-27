@@ -43,6 +43,12 @@ try:
 except ImportError:
     DeepSeekAgent = None
 
+# Advanced Providers (optional)
+try:
+    from .openrouter_agent import OpenRouterAgent
+except ImportError:
+    OpenRouterAgent = None
+
 __all__ = [
     "BaseAgent",
     "AgentResponse",
@@ -54,5 +60,6 @@ __all__ = [
     "GroqAgent",
     "HuggingFaceAgent",
     "DeepSeekAgent",
+    "OpenRouterAgent",
 ]
 

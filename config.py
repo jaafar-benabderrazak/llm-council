@@ -21,6 +21,10 @@ class Config:
     HUGGINGFACE_API_KEY: Optional[str] = os.getenv("HUGGINGFACE_API_KEY")  # Optional for public models
     DEEPSEEK_API_KEY: Optional[str] = os.getenv("DEEPSEEK_API_KEY")  # DeepSeek (Chinese provider, affordable)
     
+    # Advanced Providers
+    OPENROUTER_API_KEY: Optional[str] = os.getenv("OPENROUTER_API_KEY")  # Access to 100+ models
+    TOGETHER_API_KEY: Optional[str] = os.getenv("TOGETHER_API_KEY")  # Fast open-source models
+    
     # Paid Model Names
     OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-4-turbo-preview")
     ANTHROPIC_MODEL: str = os.getenv("ANTHROPIC_MODEL", "claude-3-5-sonnet-20241022")
@@ -32,6 +36,10 @@ class Config:
     GROQ_MODEL: str = os.getenv("GROQ_MODEL", "llama3-8b-8192")  # Smaller model, less likely to hit limits
     HUGGINGFACE_MODEL: str = os.getenv("HUGGINGFACE_MODEL", "mistralai/Mistral-7B-Instruct-v0.2")
     DEEPSEEK_MODEL: str = os.getenv("DEEPSEEK_MODEL", "deepseek-chat")  # deepseek-chat or deepseek-coder
+    
+    # Advanced Provider Models
+    OPENROUTER_MODEL: str = os.getenv("OPENROUTER_MODEL", "anthropic/claude-3.5-sonnet")
+    TOGETHER_MODEL: str = os.getenv("TOGETHER_MODEL", "meta-llama/Llama-3-70b-chat-hf")
     
     # Council Settings
     MAX_ROUNDS: int = int(os.getenv("MAX_ROUNDS", "3"))
