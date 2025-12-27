@@ -43,6 +43,14 @@ class Config:
     TOGETHER_MODEL: str = os.getenv("TOGETHER_MODEL", "meta-llama/Llama-3-70b-chat-hf")
     COMET_MODEL: str = os.getenv("COMET_MODEL", "gpt-3.5-turbo")  # Adjust based on available models
     
+    # Comet Model Categories for easy selection
+    COMET_MODELS_CATEGORIES = {
+        "advanced": ["gpt-5.2", "gpt-4-turbo", "gpt-4", "claude-3-opus", "claude-3-sonnet"],
+        "opensource": ["llama-3.1-70b", "llama-3-70b", "mixtral-8x7b", "mistral-large", "qwen-72b"],
+        "free": ["gpt-3.5-turbo", "claude-3-haiku", "llama-3-8b"],
+        "fast": ["gpt-3.5-turbo", "claude-3-haiku", "gemini-pro"]
+    }
+    
     # Council Settings
     MAX_ROUNDS: int = int(os.getenv("MAX_ROUNDS", "3"))
     TEMPERATURE: float = float(os.getenv("TEMPERATURE", "0.7"))
@@ -137,6 +145,13 @@ class Config:
             models.append("huggingface")
         except ImportError:
             pass
+        
+        # Advanced Providers
+        if cls.OPENROUTER_API_KEY:
+            models.append("openrouter")
+        
+        if cls.COMET_API_KEY:
+            models.append("comet")
         
         return models
 

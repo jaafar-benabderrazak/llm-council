@@ -4,7 +4,8 @@ from typing import List
 
 from agents import (
     ClaudeAgent, ChatGPTAgent, GeminiAgent, MistralAgent,
-    OllamaAgent, GroqAgent, HuggingFaceAgent, DeepSeekAgent, BaseAgent
+    OllamaAgent, GroqAgent, HuggingFaceAgent, DeepSeekAgent,
+    OpenRouterAgent, CometAgent, BaseAgent
 )
 from council import LLMCouncil
 from config import Config
@@ -32,11 +33,13 @@ def create_council(models: List[str] = None) -> LLMCouncil:
     # Parse model specifications (support provider:model syntax)
     parsed_models = []
     ollama_models = []  # Track specific ollama models
+    comet_models = []  # Track specific comet models or categories
+    openrouter_models = []  # Track specific openrouter models
     
     if models:
         for model_spec in models:
             if ":" in model_spec:
-                # Specific model: "ollama:llama3.1:8b" or "groq:model-name"
+                # Specific model: "ollama:llama3.1:8b" or "comet:gpt-5.2" or "comet:advanced"
                 parts = model_spec.split(":", 1)
                 provider = parts[0]
                 specific_model = parts[1] if len(parts) > 1 else None
@@ -44,12 +47,18 @@ def create_council(models: List[str] = None) -> LLMCouncil:
                 if provider == "ollama" and specific_model:
                     ollama_models.append(specific_model)
                     parsed_models.append(f"ollama:{specific_model}")
+                elif provider == "comet" and specific_model:
+                    comet_models.append(specific_model)
+                    parsed_models.append(f"comet:{specific_model}")
+                elif provider == "openrouter" and specific_model:
+                    openrouter_models.append(specific_model)
+                    parsed_models.append(f"openrouter:{specific_model}")
                 elif provider in available_models:
                     parsed_models.append(provider)
                 else:
                     print(f"Warning: Provider '{provider}' not available or not configured")
             else:
-                # Simple provider name: "gemini", "claude", etc.
+                # Simple provider name: "gemini", "claude", "comet", etc.
                 if model_spec in available_models:
                     parsed_models.append(model_spec)
                 else:
@@ -195,6 +204,85 @@ def create_council(models: List[str] = None) -> LLMCouncil:
             except Exception as e:
                 print(f"Warning: Could not initialize DeepSeek agent: {e}")
     
+    # Advanced Providers
+    # Handle OpenRouter agents
+    openrouter_specs = [m for m in models_to_use if m.startswith("openrouter")]
+    
+    if openrouter_specs:
+        if OpenRouterAgent is None:
+            print("Warning: OpenRouter requested but openai package not installed.")
+            print("Install with: pip install openai")
+        else:
+            # If no specific models, use default once
+            if not any(":" in spec for spec in openrouter_specs):
+                try:
+                    agents.append(OpenRouterAgent(
+                        name="OpenRouter",
+                        role="Versatile AI - Access to 100+ models"
+                    ))
+                except Exception as e:
+                    print(f"Warning: Could not initialize OpenRouter agent: {e}")
+            else:
+                # Create agent for each specific OpenRouter model
+                for spec in openrouter_specs:
+                    if ":" in spec:
+                        model_name = spec.split(":", 1)[1]
+                        friendly_name = f"OpenRouter-{model_name.split('/')[-1]}"
+                        try:
+                            agents.append(OpenRouterAgent(
+                                name=friendly_name,
+                                role=f"OpenRouter Expert ({model_name})",
+                                model=model_name
+                            ))
+                        except Exception as e:
+                            print(f"Warning: Could not initialize OpenRouter agent with {model_name}: {e}")
+    
+    # Handle Comet agents (with category support)
+    comet_specs = [m for m in models_to_use if m.startswith("comet")]
+    
+    if comet_specs:
+        if CometAgent is None:
+            print("Warning: Comet requested but openai package not installed.")
+            print("Install with: pip install openai")
+        else:
+            # If no specific models, use default once
+            if not any(":" in spec for spec in comet_specs):
+                try:
+                    agents.append(CometAgent(
+                        name="Comet",
+                        role="Comet AI Analysis - Versatile and powerful models"
+                    ))
+                except Exception as e:
+                    print(f"Warning: Could not initialize Comet agent: {e}")
+            else:
+                # Create agent for each specific Comet model or category
+                for spec in comet_specs:
+                    if ":" in spec:
+                        model_or_category = spec.split(":", 1)[1]
+                        
+                        # Check if it's a category
+                        categories = ['advanced', 'opensource', 'free', 'fast']
+                        if model_or_category.lower() in categories:
+                            # Use category
+                            try:
+                                agents.append(CometAgent(
+                                    name=f"Comet-{model_or_category.title()}",
+                                    category=model_or_category.lower(),
+                                    role=f"Comet {model_or_category.title()} Analysis"
+                                ))
+                            except Exception as e:
+                                print(f"Warning: Could not initialize Comet with category {model_or_category}: {e}")
+                        else:
+                            # Use specific model
+                            try:
+                                agents.append(CometAgent(
+                                    name=f"Comet-{model_or_category}",
+                                    model=model_or_category,
+                                    role=f"Comet Analysis ({model_or_category})"
+                                ))
+                            except Exception as e:
+                                print(f"Warning: Could not initialize Comet with model {model_or_category}: {e}")
+    
     if not agents:
         raise ValueError(
             "No agents could be initialized. Please check your configuration and installed packages."
@@ -224,8 +312,9 @@ def main():
         nargs="+",
         help=(
             "Models to include in the council (default: all available). "
-            "Supports specific model syntax for providers like Ollama. "
-            "Examples: claude, gemini, ollama:llama3.1:8b, ollama:mistral:7b, ollama:deepseek-coder:6.7b"
+            "Supports specific model syntax for providers. "
+            "Examples: claude, gemini, ollama:llama3.1:8b, ollama:mistral:7b, "
+            "comet:advanced, comet:free, comet:gpt-5.2, openrouter:anthropic/claude-3.5-sonnet"
         )
     )
     parser.add_argument(
