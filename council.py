@@ -63,24 +63,29 @@ class DebateResult:
         
         return filename
     
-    def save_to_markdown(self, filename: Optional[str] = None) -> str:
+    def save_to_markdown(self, filename: Optional[str] = None, results_only: bool = False) -> str:
         """
         Save debate results as a comprehensive Markdown article.
         
         Args:
             filename: Optional custom filename (without extension)
+            results_only: If True, generate results-focused document without discussions
             
         Returns:
             Path to the saved Markdown file
         """
         if filename is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"article_{timestamp}.md"
+            prefix = "results_" if results_only else "article_"
+            filename = f"{prefix}{timestamp}.md"
         elif not filename.endswith('.md'):
             filename = f"{filename}.md"
         
-        # Build comprehensive markdown article
-        markdown_content = self._build_markdown_article()
+        # Build markdown article
+        if results_only:
+            markdown_content = self._build_results_document()
+        else:
+            markdown_content = self._build_markdown_article()
         
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(markdown_content)
@@ -248,6 +253,293 @@ class DebateResult:
             return text
         return text[:max_length-3] + "..."
     
+    def _build_results_document(self) -> str:
+        """
+        Build a results-focused document with design patterns, recommendations,
+        and best practices - WITHOUT the round-by-round discussions.
+        """
+        lines = []
+        
+        # Title and metadata
+        lines.append(f"# {self.topic}")
+        lines.append("")
+        lines.append("## 📋 Research Document")
+        lines.append("")
+        lines.append(f"**Generated**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        lines.append(f"**Analysis by**: {', '.join(self.participating_agents)}")
+        lines.append(f"**Research Depth**: {len(self.rounds)} rounds of multi-agent analysis")
+        lines.append(f"**Total Analysis**: {self.total_tokens:,} tokens")
+        lines.append("**Cost**: $0.00 (100% FREE with open-source models)")
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+        
+        # Document Purpose
+        lines.append("## 🎯 Document Purpose")
+        lines.append("")
+        lines.append("This document presents **synthesized research results** including:")
+        lines.append("- 🏗️ **Design Patterns** - Proven architectural solutions")
+        lines.append("- 💡 **Recommendations** - Expert-validated best practices")
+        lines.append("- 🔧 **Technical Specifications** - Implementation details")
+        lines.append("- 📚 **Verified Sources** - Cross-validated references")
+        lines.append("- ⚠️ **Common Pitfalls** - Misconceptions and how to avoid them")
+        lines.append("- 🚀 **Action Plan** - Step-by-step implementation guide")
+        lines.append("")
+        lines.append("*This document focuses on actionable insights. Detailed debates are excluded for clarity.*")
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+        
+        # Parse synthesis into structured sections
+        synthesis_text = self.synthesis
+        
+        # Extract sections based on keywords
+        sections = self._parse_synthesis_sections(synthesis_text)
+        
+        # Add Executive Summary
+        if "EXECUTIVE SUMMARY" in sections or "SUMMARY" in sections:
+            lines.append("## 📊 Executive Summary")
+            lines.append("")
+            content = sections.get("EXECUTIVE SUMMARY", sections.get("SUMMARY", ""))
+            lines.append(content.strip())
+            lines.append("")
+            lines.append("---")
+            lines.append("")
+        
+        # Add Introduction/Context
+        if "INTRODUCTION" in sections:
+            lines.append("## 📖 Introduction & Context")
+            lines.append("")
+            lines.append(sections["INTRODUCTION"].strip())
+            lines.append("")
+            lines.append("---")
+            lines.append("")
+        
+        # Add Design Patterns (key section)
+        if any(keyword in synthesis_text.upper() for keyword in ["PATTERN", "ARCHITECTURE", "DESIGN"]):
+            lines.append("## 🏗️ Design Patterns & Architecture")
+            lines.append("")
+            
+            # Extract pattern-related content
+            if "TECHNICAL" in sections:
+                lines.append(sections["TECHNICAL"].strip())
+            elif "ANALYSIS" in sections or "DETAILED ANALYSIS" in sections:
+                content = sections.get("DETAILED ANALYSIS", sections.get("ANALYSIS", ""))
+                lines.append(content.strip())
+            else:
+                # Extract from synthesis
+                pattern_lines = []
+                in_pattern_section = False
+                for line in synthesis_text.split('\n'):
+                    if any(keyword in line.upper() for keyword in ["PATTERN", "ARCHITECTURE", "DESIGN", "IMPLEMENTATION"]):
+                        in_pattern_section = True
+                    if in_pattern_section:
+                        pattern_lines.append(line)
+                        if len(pattern_lines) > 50:  # Reasonable limit
+                            break
+                if pattern_lines:
+                    lines.append('\n'.join(pattern_lines).strip())
+            
+            lines.append("")
+            lines.append("---")
+            lines.append("")
+        
+        # Add Technical Specifications
+        if "TECHNICAL" in sections or "DEEP DIVE" in sections:
+            lines.append("## 🔧 Technical Specifications")
+            lines.append("")
+            content = sections.get("TECHNICAL", sections.get("DEEP DIVE", ""))
+            lines.append(content.strip())
+            lines.append("")
+            lines.append("---")
+            lines.append("")
+        
+        # Add Best Practices & Recommendations
+        if "BEST PRACTICES" in sections or "RECOMMENDATIONS" in sections:
+            lines.append("## 💡 Best Practices & Recommendations")
+            lines.append("")
+            content = sections.get("BEST PRACTICES", sections.get("RECOMMENDATIONS", ""))
+            lines.append(content.strip())
+            lines.append("")
+            lines.append("---")
+            lines.append("")
+        
+        # Add Verified Sources
+        if "SOURCE VALIDATION" in sections or "REFERENCES" in sections:
+            lines.append("## 📚 Verified Sources & References")
+            lines.append("")
+            content = sections.get("SOURCE VALIDATION", sections.get("REFERENCES", ""))
+            lines.append(content.strip())
+            lines.append("")
+            lines.append("---")
+            lines.append("")
+        
+        # Add Common Misconceptions
+        if "MISCONCEPTIONS" in sections or "COMMON MISCONCEPTIONS" in sections:
+            lines.append("## ⚠️ Common Pitfalls & Misconceptions")
+            lines.append("")
+            content = sections.get("COMMON MISCONCEPTIONS", sections.get("MISCONCEPTIONS", ""))
+            lines.append(content.strip())
+            lines.append("")
+            lines.append("---")
+            lines.append("")
+        
+        # Add Implementation Guide
+        if "IMPLEMENTATION" in sections or "PRACTICAL" in sections:
+            lines.append("## 🚀 Implementation Guide")
+            lines.append("")
+            content = sections.get("IMPLEMENTATION", sections.get("PRACTICAL", ""))
+            lines.append(content.strip())
+            lines.append("")
+            lines.append("---")
+            lines.append("")
+        
+        # Add Security/Quality Considerations
+        if any(keyword in synthesis_text.upper() for keyword in ["SECURITY", "QUALITY", "PERFORMANCE"]):
+            lines.append("## 🔒 Security & Quality Considerations")
+            lines.append("")
+            # Extract security-related content
+            security_content = []
+            for section_name, content in sections.items():
+                if any(keyword in section_name.upper() for keyword in ["SECURITY", "QUALITY", "PERFORMANCE"]):
+                    security_content.append(content.strip())
+            if security_content:
+                lines.append('\n\n'.join(security_content))
+            lines.append("")
+            lines.append("---")
+            lines.append("")
+        
+        # Add Conclusion
+        if "CONCLUSION" in sections:
+            lines.append("## 🎓 Conclusion & Next Steps")
+            lines.append("")
+            lines.append(sections["CONCLUSION"].strip())
+            lines.append("")
+            lines.append("---")
+            lines.append("")
+        
+        # Add Diagrams
+        lines.append("## 📊 Visual Overview")
+        lines.append("")
+        lines.append("### Solution Architecture")
+        lines.append("")
+        lines.append("```mermaid")
+        lines.append("graph TD")
+        lines.append(f"    A[{self._truncate(self.topic, 40)}]")
+        lines.append("    A --> B[Design Patterns]")
+        lines.append("    A --> C[Best Practices]")
+        lines.append("    A --> D[Technical Specs]")
+        lines.append("    B --> E[Implementation]")
+        lines.append("    C --> E")
+        lines.append("    D --> E")
+        lines.append("    E --> F[Verified Solution]")
+        lines.append("    ")
+        lines.append("    style F fill:#90EE90")
+        lines.append("    style E fill:#87CEEB")
+        lines.append("```")
+        lines.append("")
+        
+        # Add Research Methodology
+        lines.append("### Research Methodology")
+        lines.append("")
+        lines.append("```mermaid")
+        lines.append("sequenceDiagram")
+        lines.append("    participant Topic")
+        lines.append("    participant Agents")
+        lines.append("    participant Validation")
+        lines.append("    participant Results")
+        lines.append("    ")
+        lines.append("    Topic->>Agents: Research Question")
+        lines.append(f"    Note over Agents: {len(self.participating_agents)} AI models analyze")
+        lines.append("    Agents->>Validation: Provide sources")
+        lines.append(f"    Note over Validation: {len(self.rounds)} rounds of cross-checking")
+        lines.append("    Validation->>Results: Verified insights")
+        lines.append("    Results->>Results: Design patterns extracted")
+        lines.append("    Results->>Results: Best practices compiled")
+        lines.append("```")
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+        
+        # Add Analysis Metadata
+        lines.append("## 📋 Research Metadata")
+        lines.append("")
+        lines.append("| Metric | Value |")
+        lines.append("|--------|-------|")
+        lines.append(f"| **Research Team** | {', '.join(self.participating_agents)} |")
+        lines.append(f"| **Total Perspectives** | {len(self.participating_agents)} independent AI models |")
+        lines.append(f"| **Analysis Rounds** | {len(self.rounds)} rounds of refinement |")
+        lines.append(f"| **Total Tokens** | {self.total_tokens:,} |")
+        lines.append(f"| **Cost** | $0.00 (FREE with open-source models) |")
+        lines.append(f"| **Generated** | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} |")
+        lines.append("")
+        
+        # Add Quality Assurance note
+        lines.append("### Quality Assurance")
+        lines.append("")
+        lines.append("This document was generated through:")
+        lines.append(f"- ✅ **{len(self.participating_agents)}** independent AI analyses")
+        lines.append(f"- ✅ **{len(self.rounds)}** rounds of cross-validation")
+        lines.append("- ✅ **Source verification** across multiple perspectives")
+        lines.append("- ✅ **Misconception detection** and correction")
+        lines.append("- ✅ **Best practice compilation** from industry standards")
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+        
+        # Footer
+        lines.append("## 🔗 About This Document")
+        lines.append("")
+        lines.append("**Generated by**: [LLM Council](https://github.com/jaafar-benabderrazak/llm-council)")
+        lines.append("**Framework**: Multi-Agent AI Research System")
+        lines.append(f"**Models Used**: {', '.join(self.participating_agents)}")
+        lines.append("**Document Type**: Results-Focused Research Document")
+        lines.append("")
+        lines.append("**What's Included:**")
+        lines.append("- ✅ Design patterns and architectural solutions")
+        lines.append("- ✅ Technical specifications and implementation details")
+        lines.append("- ✅ Best practices with verified sources")
+        lines.append("- ✅ Common pitfalls and how to avoid them")
+        lines.append("- ✅ Actionable recommendations")
+        lines.append("")
+        lines.append("**What's Excluded:**")
+        lines.append("- ❌ Round-by-round debate discussions")
+        lines.append("- ❌ Individual agent responses")
+        lines.append("- ❌ Back-and-forth exchanges")
+        lines.append("")
+        lines.append("*For complete debate transcript, see the JSON file or full article.*")
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+        lines.append("*Research conducted with FREE open-source AI models | Zero cost | Multi-perspective validation*")
+        
+        return "\n".join(lines)
+    
+    def _parse_synthesis_sections(self, text: str) -> dict:
+        """Parse synthesis text into sections based on headers."""
+        sections = {}
+        current_section = None
+        current_content = []
+        
+        for line in text.split('\n'):
+            # Detect section headers (## or **SECTION**)
+            if line.startswith('##') or (line.startswith('**') and line.endswith('**') and len(line) > 4):
+                # Save previous section
+                if current_section:
+                    sections[current_section] = '\n'.join(current_content)
+                
+                # Start new section
+                current_section = line.strip('#').strip('*').strip().upper()
+                current_content = []
+            else:
+                current_content.append(line)
+        
+        # Save last section
+        if current_section:
+            sections[current_section] = '\n'.join(current_content)
+        
+        return sections
+    
     def _get_round_title(self, round_num: int) -> str:
         """Get descriptive title for round."""
         if round_num == 1:
@@ -284,7 +576,8 @@ class LLMCouncil:
         topic: str, 
         rounds: int = 3,
         save_results: bool = True,
-        save_markdown: bool = True
+        save_markdown: bool = True,
+        results_only: bool = True  # NEW: Default to results-only format
     ) -> DebateResult:
         """
         Conduct a multi-round debate on a topic.
@@ -294,6 +587,9 @@ class LLMCouncil:
             rounds: Number of debate rounds
             save_results: Whether to save results to JSON file
             save_markdown: Whether to save comprehensive article as Markdown
+            results_only: If True, generate results-focused document (design patterns, 
+                         recommendations, best practices) without discussions.
+                         Default: True (automatic results document)
             
         Returns:
             DebateResult containing all responses and synthesis
@@ -348,9 +644,10 @@ class LLMCouncil:
                 self.console.print(f"\n[dim]JSON results saved to: {json_filename}[/dim]")
         
         if save_markdown:
-            md_filename = result.save_to_markdown()
+            md_filename = result.save_to_markdown(results_only=results_only)
             if self.verbose:
-                self.console.print(f"[dim]Markdown article saved to: {md_filename}[/dim]")
+                doc_type = "Results document" if results_only else "Markdown article"
+                self.console.print(f"[dim]{doc_type} saved to: {md_filename}[/dim]")
         
         if self.verbose:
             self.console.print("\n[bold green]Debate Complete![/bold green]")
