@@ -24,6 +24,7 @@ class Config:
     # Advanced Providers
     OPENROUTER_API_KEY: Optional[str] = os.getenv("OPENROUTER_API_KEY")  # Access to 100+ models
     TOGETHER_API_KEY: Optional[str] = os.getenv("TOGETHER_API_KEY")  # Fast open-source models
+    COMET_API_KEY: Optional[str] = os.getenv("COMET_API_KEY")  # Comet AI models
     
     # Paid Model Names
     OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-4-turbo-preview")
@@ -40,6 +41,7 @@ class Config:
     # Advanced Provider Models
     OPENROUTER_MODEL: str = os.getenv("OPENROUTER_MODEL", "anthropic/claude-3.5-sonnet")
     TOGETHER_MODEL: str = os.getenv("TOGETHER_MODEL", "meta-llama/Llama-3-70b-chat-hf")
+    COMET_MODEL: str = os.getenv("COMET_MODEL", "gpt-3.5-turbo")  # Adjust based on available models
     
     # Council Settings
     MAX_ROUNDS: int = int(os.getenv("MAX_ROUNDS", "3"))

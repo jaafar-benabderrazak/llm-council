@@ -49,6 +49,11 @@ try:
 except ImportError:
     OpenRouterAgent = None
 
+try:
+    from .comet_agent import CometAgent
+except ImportError:
+    CometAgent = None
+
 __all__ = [
     "BaseAgent",
     "AgentResponse",
@@ -61,5 +66,6 @@ __all__ = [
     "HuggingFaceAgent",
     "DeepSeekAgent",
     "OpenRouterAgent",
+    "CometAgent",
 ]
 
