@@ -46,6 +46,18 @@ LLM Council is a powerful framework that orchestrates discussions between multip
 
 👉 **[See Research Mode Documentation](RESEARCH_MODE.md)** for detailed guide
 
+### 🔍 Tech Watch / Veille Technologique (NEW!)
+- **📡 Technology Monitoring**: Track trends, compare technologies, analyze innovations
+- **🤖 Automated Scanning**: Schedule daily/weekly monitoring with automation scripts
+- **📊 Comparative Analysis**: Multi-technology benchmarks and comparisons
+- **🔒 Security Tracking**: Monitor CVEs, vulnerabilities, and security updates
+- **💰 Cost Analysis**: Compare cloud providers, tools, and deployment strategies
+- **📈 Trend Reports**: Generate weekly/monthly technology intelligence reports
+
+**Perfect for**: CTOs, Tech Leads, DevOps teams, Security teams, Innovation labs
+
+👉 **[See Tech Watch Guide](TECH_WATCH_GUIDE.md)** for comprehensive guide (French/English)
+
 ## 🚀 Quick Start
 
 ### Installation
@@ -376,7 +388,25 @@ python examples/programmatic_access.py
 
 # Specific models
 python examples/specific_models.py
+
+# 🆕 Tech Watch (Quick Start)
+python examples/tech_watch_quick_start.py
+
+# 🆕 5 specific models
+python examples/5_models_specific.py
 ```
+
+### 🔍 Tech Watch Automation
+
+```bash
+# PowerShell (Windows)
+.\tech_watch_automation.ps1
+
+# Python (Cross-platform)
+python tech_watch_automation.py
+```
+
+See **[TECH_WATCH_GUIDE.md](TECH_WATCH_GUIDE.md)** for detailed automation and templates.
 
 ## 📋 Requirements
 
